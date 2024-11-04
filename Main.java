@@ -1,137 +1,82 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+import javax.swing.*;
 
-package cyan;
-
-import java.util.Scanner;
-
-/**
- *
- * @author Student
- */
 public class Main {
+    static class Car {
+        String name;
+        int price;
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-   Scanner input = new Scanner(System.in);
-        int choice;
-        int num1 = 100;
-        int num2 = 200;
-        int num3 = 300;
-        int num4 = 400;
-        int num5 = 500;
-        int quantity;
-        double yes;
-        double totalAmount = 0.0;
-        double result;
-
-        System.out.println("Welcome to NAVS CAR RESELLER");
-
-        do {
-            // Show product options
-            System.out.println("Choose the car you want to purchase, type the number of the car you want to buy:");
-            System.out.println("1. TOTOYA SUPERA ------ $100");
-            System.out.println("2. DOGGE CHARGER ------ $200");
-            System.out.println("3. ABAKATATA ---------- $300");
-            System.out.println("4. ELAMBURGAMBOR ------ $400");
-            System.out.println("5. FARIRIRE ----------- $500");
-
-            // Ask for item choice and validate
-            do {
-                System.out.println("Enter Item:");
-                choice = input.nextInt();
-                if (choice < 1 || choice > 5) {
-                    System.out.println("Invalid choice! Please select a valid item (1-5).");
-                }
-            } while (choice < 1 || choice > 5);  // Keep asking until a valid choice is entered
-
-            // Process the chosen item
-            switch (choice) {
-                case 1:
-                    System.out.println("Enter the quantity:");
-                    quantity = input.nextInt();
-                    result = num1 * quantity;
-                    totalAmount += result;
-                    System.out.println("Your total for TOTOYA SUPERA is: $" + result);
-                    break;
-
-                case 2:
-                    System.out.println("Enter the quantity:");
-                    quantity = input.nextInt();
-                    result = num2 * quantity;
-                    totalAmount += result;
-                    System.out.println("Your total for DOGGE CHARGER is: $" + result);
-                    break;
-
-                case 3:
-                    System.out.println("Enter the quantity:");
-                    quantity = input.nextInt();
-                    result = num3 * quantity;
-                    totalAmount += result;
-                    System.out.println("Your total for ABAKATATA is: $" + result);
-                    break;
-
-                case 4:
-                    System.out.println("Enter the quantity:");
-                    quantity = input.nextInt();
-                    result = num4 * quantity;
-                    totalAmount += result;
-                    System.out.println("Your total for Iphone promax is: $" + result);
-                    break;
-
-                case 5:
-                    System.out.println("Enter the quantity:");
-                    quantity = input.nextInt();
-                    result = num5 * quantity;
-                    totalAmount += result;
-                    System.out.println("Your total for FARIRIRE is: $" + result);
-                    break;
-            }
-
-            // Ask if they want to buy more
-            System.out.println("Do you want to buy more items? (1 for Yes, 0 for No)");
-            choice = input.nextInt();
-        } while (choice == 1);  // Continue loop if they want to buy more items
-
-        // Show final total
-        System.out.println("Your total purchase is: $" + totalAmount);
-
-        // Ask for the amount of cash and ensure it's sufficient
-        do {
-            System.out.println("Enter the amount of cash:");
-            yes = input.nextDouble();
-
-            if (yes < totalAmount) {
-                System.out.println("Insufficient cash. Please enter an amount equal to or greater than the total purchase.");
-            }
-        } while (yes < totalAmount);
-
-        // Calculate change and display
-        double change = yes - totalAmount;
-        System.out.println("Your change is: $" + change);
-
-        // Ask if they want a receipt
-        System.out.println("Do you want a receipt? (1 for Yes, 0 for No)");
-        int receipt = input.nextInt();
-
-        if (receipt == 1) {
-            System.out.println("**** RECEIPT ****");
-            System.out.println("NAVS CAR SHOP");
-            System.out.println("1st Crumb,Digos City");
-            System.out.println("Total amount: $" + totalAmount);
-            System.out.println("Cash provided: $" + yes);
-            System.out.println("Change: $" + change);
-            System.out.println("**********************");
-        } else {
-            System.out.println("Thank you for shopping! No receipt requested.");
+        Car(String name, int price) {
+            this.name = name;
+            this.price = price;
         }
-
-        System.out.println("Thank you for visiting NAVS CAR SHOP!");
     }
 
+    public static void main(String[] args) {
+        Car[] cars = {
+            new Car("TOTOYA SUPERA", 100),
+            new Car("DOGGE CHARGER", 200),
+            new Car("ABAKATATA", 300),
+            new Car("ELAMBURGAMBOR", 400),
+            new Car("FARIRIRE", 500)
+        };
+
+        double totalAmount = 0.0;
+
+        JOptionPane.showMessageDialog(null, "Welcome to NAVS CAR RESELLER");
+
+        int choice;
+        do {
+            // Show product options
+            StringBuilder options = new StringBuilder("Choose the car you want to purchase:\n");
+            for (int i = 0; i < cars.length; i++) {
+                options.append(i + 1).append(". ").append(cars[i].name).append(" ------ $").append(cars[i].price).append("\n");
+            }
+
+            choice = Integer.parseInt(JOptionPane.showInputDialog(options.toString() + "Enter Item (1-5):"));
+
+            if (choice < 1 || choice > 5) {
+                JOptionPane.showMessageDialog(null, "Invalid choice! Please select a valid item (1-5).");
+                continue;
+            }
+
+            int quantity = Integer.parseInt(JOptionPane.showInputDialog("Enter the quantity:"));
+            double result = cars[choice - 1].price * quantity;
+            totalAmount += result;
+
+            JOptionPane.showMessageDialog(null, "Your total for " + cars[choice - 1].name + " is: $" + String.format("%.2f", result));
+
+            // Ask if they want to buy more
+            choice = JOptionPane.showConfirmDialog(null, "Do you want to buy more items?", "Continue", JOptionPane.YES_NO_OPTION);
+        } while (choice == JOptionPane.YES_OPTION);
+
+        // Final amount and cash handling
+        JOptionPane.showMessageDialog(null, "Your total purchase is: $" + String.format("%.2f", totalAmount));
+        double cash;
+
+        do {
+            cash = Double.parseDouble(JOptionPane.showInputDialog("Enter the amount of cash:"));
+            if (cash < totalAmount) {
+                JOptionPane.showMessageDialog(null, "Insufficient cash. Please enter an amount equal to or greater than the total purchase.");
+            }
+        } while (cash < totalAmount);
+
+        double change = cash - totalAmount;
+        JOptionPane.showMessageDialog(null, "Your change is: $" + String.format("%.2f", change));
+
+        // Receipt option
+        int receipt = JOptionPane.showConfirmDialog(null, "Do you want a receipt?", "Receipt", JOptionPane.YES_NO_OPTION);
+        if (receipt == JOptionPane.YES_OPTION) {
+            StringBuilder receiptMessage = new StringBuilder("**** RECEIPT ****\n");
+            receiptMessage.append("NAVS CAR SHOP\n")
+                          .append("Total amount: $").append(String.format("%.2f", totalAmount)).append("\n")
+                          .append("Cash provided: $").append(String.format("%.2f", cash)).append("\n")
+                          .append("Change: $").append(String.format("%.2f", change)).append("\n")
+                          .append("**********************");
+            JOptionPane.showMessageDialog(null, receiptMessage.toString());
+        } else {
+            JOptionPane.showMessageDialog(null, "Thank you for shopping! No receipt requested.");
+        }
+
+        JOptionPane.showMessageDialog(null, "Thank you for visiting NAVS CAR SHOP!");
+    }
 }
